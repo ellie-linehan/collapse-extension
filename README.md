@@ -1,0 +1,29 @@
+# Collapse Extension
+
+A browser extension that helps you manage your tabs by collapsing them into groups for better organization and productivity.
+
+## Features
+
+- Collapse and expand tab groups with a single click
+- Intuitive interface for managing your browsing sessions
+- Lightweight and privacy-focused
+- All data stays on your device
+
+## Installation
+
+1. Clone this repository
+2. Open Chrome/Edge and go to `chrome://extensions/`
+3. Enable "Developer mode" in the top right
+4. Click "Load unpacked" and select the extension directory
+
+## Privacy
+
+Your privacy is important to us. This extension collects minimal data and stores everything locally on your device. For more details, please see our [Privacy Policy](privacy-policy.html).
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit issues or pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
