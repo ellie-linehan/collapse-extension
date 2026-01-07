@@ -305,6 +305,21 @@ async function closeEverything() {
   // Intentionally no undo for this action.
   await chrome.storage.local.remove('lastState');
 
+  // First, clean up all tab groups by ungrouping all tabs
+  const windows = await chrome.windows.getAll();
+  for (const window of windows) {
+    try {
+      const tabs = await chrome.tabs.query({ windowId: window.id });
+      const tabsToUngroup = tabs.filter(t => t.groupId !== -1).map(t => t.id);
+      if (tabsToUngroup.length > 0) {
+        await chrome.tabs.ungroup(tabsToUngroup);
+      }
+    } catch (error) {
+      console.error('Error cleaning up tab groups:', error);
+    }
+  }
+
+  // Then create the new timeline window
   const url = chrome.runtime.getURL('new-timeline.html');
   const newWindow = await chrome.windows.create({
     url,
@@ -313,7 +328,7 @@ async function closeEverything() {
     state: 'maximized'
   });
 
-  const windows = await chrome.windows.getAll();
+  // Close all other windows
   for (const window of windows) {
     if (newWindow?.id && window.id === newWindow.id) continue;
     try {
@@ -323,6 +338,25 @@ async function closeEverything() {
     }
   }
 }
+
+// Remove empty tab groups when all their tabs are closed
+chrome.tabs.onRemoved.addListener(async (tabId, removeInfo) => {
+  try {
+    // Get all tab groups in the window where the tab was closed
+    const groups = await chrome.tabGroups.query({ windowId: removeInfo.windowId });
+    
+    // Check each group to see if it's now empty
+    for (const group of groups) {
+      const tabs = await chrome.tabs.query({ groupId: group.id });
+      if (tabs.length === 0) {
+        // Group is empty, remove it
+        await chrome.tabs.ungroup(group.id);
+      }
+    }
+  } catch (error) {
+    console.error('Error cleaning up empty tab groups:', error);
+  }
+});
 
 // Message handling
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
