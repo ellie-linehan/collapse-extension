@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Collapse",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "End the day with one window",
   "permissions": [
     "tabGroups",
