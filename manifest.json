@@ -1,13 +1,12 @@
 {
   "manifest_version": 3,
   "name": "Collapse",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "description": "End the day with one window",
   "permissions": [
     "tabGroups",
     "tabs",
-    "storage",
-    "favicon"
+    "storage"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -23,12 +22,6 @@
   "background": {
     "service_worker": "background.js"
   },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"]
-    }
-  ],
   "web_accessible_resources": [
     {
       "resources": [
@@ -48,6 +41,5 @@
     "32": "icons/icon32.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
-  },
-  "privacy_policy": "https://github.com/ellie-linehan/collapse-extension/blob/main/privacy-policy.html"
+  }
 }
