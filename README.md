@@ -4,8 +4,8 @@ A browser extension that helps you manage your tabs by collapsing them into grou
 
 ## Features
 
-- Collapse and expand tab groups with a single click
-- Intuitive interface for managing your browsing sessions
+- Collapse tab groups with a single click across window(s)
+- Close all tabs with a single click ("Start a new life")
 - Lightweight and privacy-focused
 - All data stays on your device
 
