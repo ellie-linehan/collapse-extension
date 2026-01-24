@@ -196,47 +196,34 @@ async function restoreFromUndo() {
 }
 
 async function collapseTabsInCurrentWindow() {
-  try {
-    // First get all windows to find the focused one
-    const windows = await chrome.windows.getAll({ populate: true });
-    const focusedWindow = windows.find(w => w.focused) || windows[0];
-    
-    if (!focusedWindow?.id) {
-      console.error('No focused window found');
-      return;
-    }
+  const currentWindow = await chrome.windows.getCurrent({ populate: false });
+  if (!currentWindow?.id) return;
 
-    // Save state for undo (window-scoped)
-    await saveStateForUndo({ scope: 'window', windowId: focusedWindow.id });
+  // Save state for undo (window-scoped)
+  await saveStateForUndo({ scope: 'window', windowId: currentWindow.id });
 
-    // Use the already populated tabs from the window object
-    const tabs = focusedWindow.tabs || [];
-    const tabsToUngroup = tabs.filter(t => t.groupId !== -1).map(t => t.id);
-    
-    if (tabsToUngroup.length > 0) {
-      await chrome.tabs.ungroup(tabsToUngroup);
-    }
+  const tabs = await chrome.tabs.query({ windowId: currentWindow.id });
+  const tabsToUngroup = tabs.filter(t => t.groupId !== -1).map(t => t.id);
+  if (tabsToUngroup.length > 0) {
+    await chrome.tabs.ungroup(tabsToUngroup);
+  }
 
-    const tabsByDomain = new Map();
-    for (const tab of tabs) {
-      if (tab.id === chrome.tabs.TAB_ID_NONE) continue;
-      if (tab.pinned) continue; // pinned tabs can't be grouped
+  const tabsByDomain = new Map();
+  for (const tab of tabs) {
+    if (tab.id === chrome.tabs.TAB_ID_NONE) continue;
+    if (tab.pinned) continue; // pinned tabs can't be grouped
 
-      const domain = getDomain(tab.url);
-      if (!tabsByDomain.has(domain)) tabsByDomain.set(domain, []);
-      tabsByDomain.get(domain).push(tab);
-    }
+    const domain = getDomain(tab.url);
+    if (!tabsByDomain.has(domain)) tabsByDomain.set(domain, []);
+    tabsByDomain.get(domain).push(tab);
+  }
 
-    for (const [domain, domainTabs] of tabsByDomain.entries()) {
-      if (domainTabs.length < 2) continue;
-      const tabIds = domainTabs.map(t => t.id);
-      const color = getColorForDomain(domain);
-      const group = await chrome.tabs.group({ tabIds });
-      await chrome.tabGroups.update(group, { title: domain, color, collapsed: true });
-    }
-  } catch (error) {
-    console.error('Error in collapseTabsInCurrentWindow:', error);
-    throw error; // This will be caught by the message handler
+  for (const [domain, domainTabs] of tabsByDomain.entries()) {
+    if (domainTabs.length < 2) continue;
+    const tabIds = domainTabs.map(t => t.id);
+    const color = getColorForDomain(domain);
+    const group = await chrome.tabs.group({ tabIds });
+    await chrome.tabGroups.update(group, { title: domain, color, collapsed: true });
   }
 }
 

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collapse</title>
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDA3YWZmIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTkgM0g1YTIgMiAwIDAgMC0yIDJ2MTRhMiAyIDAgMCAwIDIgMmgxNGEyIDIgMCAwIDAgMi0yVjVhMiAyIDAgMCAwLTItMnoiLz48cGF0aCBkPSJNOSAzdjE4Ii8+PHBhdGggZD0iTTE1IDEwbC0yIDIgMiAyIi8+PC9zdmc+" type="image/svg+xml">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Collapse</h1>
+      <p class="subtitle">End the day with one window</p>
+    </header>
+    <div class="mode">
+      <label class="mode-option">
+        <input type="radio" name="collapseMode" value="current" checked>
+        <span>Current window only</span>
+      </label>
+      <label class="mode-option">
+        <input type="radio" name="collapseMode" value="all">
+        <span>All windows into current</span>
+      </label>
+      <label class="mode-option">
+        <input type="radio" name="collapseMode" value="reset">
+        <span>Start a new life 🔥</span>
+      </label>
+    </div>
+    <div class="actions">
+      <button id="collapseButton" class="btn primary">Collapse Windows</button>
+      <div id="confirmReset" class="confirm hidden">
+        <div class="confirm-text">Close ALL windows + tabs?</div>
+        <div class="confirm-actions">
+          <button id="confirmResetButton" class="btn danger">Confirm</button>
+          <button id="cancelResetButton" class="btn secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <div id="status" class="status"></div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
